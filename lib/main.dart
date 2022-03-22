@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           final ImagesResponse posts = snapshot.data!;
-          return _buildPosts(context, posts);
+          return _buildPosts(context, posts.rows!);
         } else {
           return Center(
             child: CircularProgressIndicator(),
@@ -74,17 +74,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // build list view & its tile
-  ListView _buildPosts(BuildContext context, ImagesResponse posts) {
+  ListView _buildPosts(BuildContext context, List<Rows> posts) {
     return ListView.builder(
-      itemCount: posts.rows?.length,
+      itemCount: posts.length,
       padding: EdgeInsets.all(8),
       itemBuilder: (context, index) {
-        return Card(
-          elevation: 4,
-          child: ListTile(
-           ,
-          ),
-        );
+        if(posts[index].imageHref!=null){
+          if(posts[index].description!=null){
+            return  Card(
+              child: Container(
+                height: 300,
+                width: double.infinity,
+
+                child: ClipRect(
+                  child: Image.network(posts[index].imageHref!),
+                ),
+
+
+              ),
+              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
+            );
+          }
+        }
+        return Text("Null Value Expected");
       },
     );
   }
